@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentinelMail AI — Phishing Email Detection &amp; Explainable SOC</title>
+  <meta name="description" content="AI-Powered Phishing Email Detection System using Calibrated SVM, TF-IDF NLP, Offline URL Heuristics, and Explainable AI." />
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/static/css/shared.css" />
+  <link rel="stylesheet" href="/static/css/landing.css" />
+</head>
+<body>
+  <div class="bg-grid-backdrop" aria-hidden="true"></div>
+
+  <!-- Fixed Top Navigation -->
+  <header class="site-nav" id="siteNav">
+    <a href="/" class="nav-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 5.5V11.5C4 16.8 7.4 21.4 12 22.8C16.6 21.4 20 16.8 20 11.5V5.5L12 2Z" stroke="#00d2ff" stroke-width="1.8" fill="rgba(0,210,255,0.14)"/>
+          <path d="M8.8 12.2L11 14.4L15.6 9.8" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>SentinelMail</span>
+      <span class="brand-tag">AI SOC</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Landing sections">
+      <a href="#parallax-layers" data-scroll-to="#parallax-layers">Architecture</a>
+      <a href="#pipeline-story" data-scroll-to="#pipeline-story">NLP Pipeline</a>
+      <a href="#pin-windmill-wrap" data-scroll-to="#pin-windmill-wrap">Defense Core</a>
+      <a href="#neural-matrix" data-scroll-to="#neural-matrix">Neural Matrix</a>
+      <a href="#live-sandbox" data-scroll-to="#live-sandbox">Live Demo</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="/app#benchmarks" class="btn btn-ghost btn-sm">Benchmarks</a>
+      <a href="/app" class="btn btn-primary btn-sm">Launch SOC App &rarr;</a>
+    </div>
+  </header>
+
+  <!-- Optional ScrollTrigger Visual Markers Toggle -->
+  <button type="button" class="marker-toggle-btn" id="toggleMarkersBtn" title="Toggle GSAP ScrollTrigger visual debug markers">
+    <span class="status-dot" style="background: var(--cyan); box-shadow: 0 0 8px var(--cyan);"></span>
+    <span>ScrollTrigger Markers: <strong id="markerStatus">OFF</strong></span>
+  </button>
+
+  <!-- GSAP ScrollSmoother Wrapper -->
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+
+      <!-- =================================================================
+           SECTION 1: HERO + ANIME.JS v4 BLENDED KINETIC SHAPES
+           ================================================================= -->
+      <section class="section hero-section" id="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">
+              <span class="status-dot"></span>
+              <span>100% Offline Local ML &bull; CEAS 2008 Verified</span>
+            </span>
+
+            <h1 class="hero-title">
+              Stop Phishing <br />
+              <span class="text-gradient">Before It Strikes.</span>
+            </h1>
+
+            <p class="hero-desc">
+              A complete cybersecurity web application pairing <strong>Calibrated Linear SVM</strong>,
+              <strong>5,000-feature TF-IDF NLP</strong>, <strong>zero-network URL forensics</strong>, and
+              <strong>Explainable AI (XAI)</strong> token attribution—delivering sub-millisecond threat intelligence
+              with zero cloud data egress.
+            </p>
+
+            <div class="hero-cta-row">
+              <a href="/app" class="btn btn-primary btn-lg">
+                <span>Launch Complete SOC App</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="#live-sandbox" data-scroll-to="#live-sandbox" class="btn btn-secondary btn-lg">
+                <span>Try Instant Email Scan</span>
+              </a>
+            </div>
+
+            <div class="hero-metrics">
+              <div class="hero-metric-card">
+                <div class="hero-metric-val" id="heroF1" style="color: var(--emerald);">99.64%</div>
+                <div class="hero-metric-lbl">SVM Test F1</div>
+              </div>
+              <div class="hero-metric-card">
+                <div class="hero-metric-val" id="heroAuc" style="color: var(--cyan);">99.95%</div>
+                <div class="hero-metric-lbl">ROC-AUC Score</div>
+              </div>
+              <div class="hero-metric-card">
+                <div class="hero-metric-val">0.001 ms</div>
+                <div class="hero-metric-lbl">Inference Latency</div>
+              </div>
+              <div class="hero-metric-card">
+                <div class="hero-metric-val" id="heroScanned">0</div>
+                <div class="hero-metric-lbl">Emails Scanned</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Anime.js v4 Blended Kinetic Threat Nodes Stage -->
+          <div class="kinetic-stage-card" id="kineticStageCard">
+            <div class="kinetic-stage-header">
+              <span class="pill pill-info">ANIME.JS v4 &bull; BLEND ENGINE</span>
+              <button type="button" class="btn btn-ghost btn-sm" id="pulseShapesBtn">Scatter Nodes</button>
+            </div>
+
+            <div class="kinetic-arena" id="kineticArena" title="Click anywhere to trigger blended kinetic telemetry">
+              <div class="kinetic-core-ring"></div>
+              <div class="kinetic-core-ring outer"></div>
+
+              <div class="shape">SVM</div>
+              <div class="shape shape-alert">IP</div>
+              <div class="shape shape-safe">XAI</div>
+              <div class="shape">NLP</div>
+              <div class="shape shape-alert">URL</div>
+              <div class="shape shape-safe">F1</div>
+              <div class="shape">LR</div>
+              <div class="shape shape-alert">24H</div>
+              <div class="shape shape-safe">TLS</div>
+              <div class="shape">RF</div>
+              <div class="shape shape-alert">BIT</div>
+              <div class="shape shape-safe">NB</div>
+            </div>
+
+            <div class="kinetic-stage-footer">
+              <span class="mono">composition: 'blend' &bull; click field to re-scatter</span>
+              <span class="pill pill-legitimate">● Real-Time Ready</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 2: PARALLAX DEPTH SHOWCASE (data-speed="0.8", "2.0", "1.2")
+           ================================================================= -->
+      <section class="section parallax-section" id="parallax-layers">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">GSAP ScrollSmoother &bull; Multi-Velocity Parallax</span>
+            <h2 class="section-title">Three Defense Layers, <span class="text-gradient">Zero Blind Spots.</span></h2>
+            <p class="section-subtitle">
+              Every email flows simultaneously through calibrated machine learning, offline structural URL inspection,
+              and transparent coefficient attribution—rendered here with native <code>data-speed</code> parallax depth.
+            </p>
+          </div>
+
+          <div class="parallax-grid">
+            <div class="cyber-panel parallax-card" data-speed="0.8">
+              <span class="speed-badge">data-speed="0.8" &bull; Anchored Layer</span>
+              <h3>Zero-Network URL Forensics</h3>
+              <p>
+                Evaluates raw IPv4 hosts, URL shorteners (<code>bit.ly</code>, <code>tinyurl</code>),
+                excessive subdomain layering, punycode homographs (<code>xn--</code>), <code>@</code> host
+                obfuscation, and high-abuse TLDs completely offline without triggering attacker tracking pixels.
+              </p>
+              <div class="parallax-stat">
+                <span style="color: var(--text-muted);">External Network Calls</span>
+                <strong>0 Requests</strong>
+              </div>
+            </div>
+
+            <div class="cyber-panel parallax-card elevated-mid" data-speed="2.0">
+              <span class="speed-badge">data-speed="2.0" &bull; High-Velocity Core</span>
+              <h3>Calibrated Linear SVM Ensemble</h3>
+              <p>
+                Benchmarked across 4 algorithms with 5-fold stratified cross-validation on 10,000 CEAS 2008 emails.
+                Platt scaling (<code>CalibratedClassifierCV</code>) converts hyperplane margins into trustworthy
+                3-tier threat probabilities.
+              </p>
+              <div class="parallax-stat">
+                <span style="color: var(--text-muted);">Held-Out Test Accuracy</span>
+                <strong>99.60%</strong>
+              </div>
+            </div>
+
+            <div class="cyber-panel parallax-card elevated-right" data-speed="1.2">
+              <span class="speed-badge">data-speed="1.2" &bull; Trailing Telemetry</span>
+              <h3>Explainable AI (XAI) Attribution</h3>
+              <p>
+                Eliminates black-box uncertainty by computing exact <code>TF-IDF &times; w<sub>i</sub></code>
+                token impact scores alongside deterministic social-engineering rules—showing analysts <em>why</em>
+                an email was flagged.
+              </p>
+              <div class="parallax-stat">
+                <span style="color: var(--text-muted);">Vocabulary N-Grams</span>
+                <strong>5,000 Features</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 3: SCRUBBED STORY TIMELINE (.scroll-trigger-ready__worm-wrap)
+           ================================================================= -->
+      <section class="scroll-trigger-ready__worm-wrap" id="pipeline-story">
+        <div class="container">
+          <div class="section-header">
+            <span class="eyebrow">GSAP ScrollTrigger &bull; Scrubbed Storytelling</span>
+            <h2 class="section-title">From Raw Email to <span class="text-gradient">Verdict in 0.001 ms.</span></h2>
+            <p class="section-subtitle">
+              Scroll to scrub through the zero-leakage NLP and machine learning telemetry pipeline—every stage
+              synchronizes directly with your scroll position.
+            </p>
+          </div>
+
+          <div class="worm-stage">
+            <svg class="worm-svg-track" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="wormGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#00d2ff" />
+                  <stop offset="50%" stop-color="#38bdf8" />
+                  <stop offset="100%" stop-color="#10b981" />
+                </linearGradient>
+              </defs>
+              <path class="worm-path-bg" d="M 20 55 C 160 5, 260 105, 400 55 C 540 5, 660 105, 800 55 C 940 5, 1060 105, 1180 55" />
+              <path class="worm-path-active" id="wormPathActive" d="M 20 55 C 160 5, 260 105, 400 55 C 540 5, 660 105, 800 55 C 940 5, 1060 105, 1180 55" />
+            </svg>
+
+            <div class="worm-steps-grid">
+              <article class="worm-step">
+                <div class="worm-step-num">STAGE 01 // SANITIZE</div>
+                <h4>HTML &amp; NLP Hygiene</h4>
+                <p>Decodes HTML entities, strips obfuscated markup, masks raw URLs, and folds whitespace with strict zero-leakage isolation.</p>
+              </article>
+
+              <article class="worm-step">
+                <div class="worm-step-num">STAGE 02 // VECTORIZE</div>
+                <h4>TF-IDF (1,2) N-Grams</h4>
+                <p>Projects text into 5,000 sublinear TF-IDF dimensions fitted exclusively on the 8,000-email stratified training split.</p>
+              </article>
+
+              <article class="worm-step">
+                <div class="worm-step-num">STAGE 03 // CLASSIFY</div>
+                <h4>Calibrated Inference</h4>
+                <p>Evaluates calibrated probabilities across Linear SVM, Logistic Regression, Random Forest, or Multinomial Naive Bayes.</p>
+              </article>
+
+              <article class="worm-step">
+                <div class="worm-step-num">STAGE 04 // EXPLAIN</div>
+                <h4>XAI &amp; Privacy Audit</h4>
+                <p>Surfaces salient positive/negative tokens, offline URL flags, 3-tier risk verdicts, and body-free SQLite audit logging.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 4: PINNED SCRUBBED WINDMILL (#pin-windmill-wrap / #pin-windmill)
+           ================================================================= -->
+      <section id="pin-windmill-wrap">
+        <div id="pin-windmill">
+          <div class="windmill-visual">
+            <div class="windmill-orbit">
+              <svg id="pin-windmill-svg" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sentinel Defense Turbine">
+                <defs>
+                  <linearGradient id="bladeCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#00d2ff" />
+                    <stop offset="100%" stop-color="#0284c7" stop-opacity="0.35" />
+                  </linearGradient>
+                  <linearGradient id="bladeEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10b981" />
+                    <stop offset="100%" stop-color="#059669" stop-opacity="0.35" />
+                  </linearGradient>
+                </defs>
+                <!-- Outer Precision Ring -->
+                <circle cx="130" cy="130" r="118" stroke="rgba(0,210,255,0.35)" stroke-width="1.5" stroke-dasharray="8 8" />
+                <circle cx="130" cy="130" r="94" stroke="rgba(16,185,129,0.28)" stroke-width="1.2" />
+
+                <!-- 4 Aerodynamic Windmill Sentinel Blades -->
+                <path d="M130 130 L114 26 C125 18, 146 22, 152 38 L138 130 Z" fill="url(#bladeCyan)" stroke="#38bdf8" stroke-width="1.5" />
+                <path d="M130 130 L234 114 C242 125, 238 146, 222 152 L130 138 Z" fill="url(#bladeEmerald)" stroke="#34d399" stroke-width="1.5" />
+                <path d="M130 130 L146 234 C135 242, 114 238, 108 222 L122 130 Z" fill="url(#bladeCyan)" stroke="#38bdf8" stroke-width="1.5" />
+                <path d="M130 130 L26 146 C18 135, 22 114, 38 108 L130 122 Z" fill="url(#bladeEmerald)" stroke="#34d399" stroke-width="1.5" />
+
+                <!-- Secondary Cross Vanes -->
+                <line x1="52" y1="52" x2="208" y2="208" stroke="rgba(56,189,248,0.45)" stroke-width="1.5" />
+                <line x1="208" y1="52" x2="52" y2="208" stroke="rgba(16,185,129,0.45)" stroke-width="1.5" />
+
+                <!-- Central Hub -->
+                <circle cx="130" cy="130" r="24" fill="#070d1e" stroke="#00d2ff" stroke-width="3" />
+                <circle cx="130" cy="130" r="9" fill="#10b981" />
+              </svg>
+            </div>
+            <div class="windmill-deg-readout">
+              SCRUB ROTATION: <span id="windmillDeg">0°</span> / 900°
+            </div>
+          </div>
+
+          <div class="windmill-content">
+            <span class="eyebrow">Pinned ScrollTrigger &bull; 900° Scrubbed Engine</span>
+            <h2 class="section-title" style="font-size: clamp(1.85rem, 3.2vw, 2.7rem);">
+              Four-Quadrant <span class="text-gradient">Threat Engine.</span>
+            </h2>
+            <p class="section-subtitle" style="font-size: 0.96rem;">
+              Pinned cleanly in place while you scroll, the Sentinel Core scrubs through 2.5 full rotations
+              (<code>rotateZ: 900</code>)—illuminating each security defense layer sequentially.
+            </p>
+
+            <div class="windmill-layers" id="windmillLayers">
+              <div class="windmill-layer-item is-active" data-phase="0">
+                <span class="layer-dot"></span>
+                <div>
+                  <h4>01 &bull; Semantic Coercion Detection</h4>
+                  <p>Catches urgency threats ("within 24 hours", "account suspended") and credential harvesting lures.</p>
+                </div>
+              </div>
+              <div class="windmill-layer-item" data-phase="1">
+                <span class="layer-dot"></span>
+                <div>
+                  <h4>02 &bull; Multi-Model Benchmarking</h4>
+                  <p>Switch live between Calibrated Linear SVM, Logistic Regression, Random Forest, and Naive Bayes.</p>
+                </div>
+              </div>
+              <div class="windmill-layer-item" data-phase="2">
+                <span class="layer-dot"></span>
+                <div>
+                  <h4>03 &bull; Offline Structural URL Scanner</h4>
+                  <p>Flags raw IPv4 hosts, bit.ly shorteners, punycode lookalikes, and nested subdomains safely.</p>
+                </div>
+              </div>
+              <div class="windmill-layer-item" data-phase="3">
+                <span class="layer-dot"></span>
+                <div>
+                  <h4>04 &bull; Privacy-First Audit Trail</h4>
+                  <p>Logs truncated subject snippets and risk verdicts to local SQLite—never storing email bodies or secrets.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 5: ANIME.JS v4 — 13x13 DOT GRID & ORIENTATION SCOPE WAVE
+           ================================================================= -->
+      <section class="section" id="neural-matrix">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">Anime.js v4 &bull; Stagger Grid &amp; Responsive Scope</span>
+            <h2 class="section-title">Visualizing <span class="text-gradient">5,000 TF-IDF Dimensions.</span></h2>
+            <p class="section-subtitle">
+              Interactive matrix telemetry powered by Anime.js v4 <code>createTimeline()</code> radial grid staggers
+              and <code>createScope()</code> orientation-aware media queries.
+            </p>
+          </div>
+
+          <div class="anime-showcase-grid">
+            <!-- 13x13 Stagger Grid -->
+            <div class="cyber-panel matrix-panel">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;">
+                  <span class="pill pill-info">GRID [13, 13] &bull; FROM CENTER</span>
+                  <span class="mono" style="font-size: 0.74rem; color: var(--text-muted);">169 Feature Nodes</span>
+                </div>
+                <h3 style="font-family: var(--font-display); font-size: 1.4rem; margin: 1rem 0 0.4rem;">
+                  Neural Feature Activation Field
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+                  Click any node in the 13&times;13 matrix to fire a radial stagger ripple across the token field.
+                </p>
+              </div>
+
+              <div class="dot-grid" id="dotGrid" aria-label="13 by 13 interactive feature grid"></div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; font-size: 0.78rem; color: var(--text-muted);">
+                <span class="mono">stagger([1.1, .75], { grid: [13, 13], from: 'center' })</span>
+                <button type="button" class="btn btn-ghost btn-sm" id="resetMatrixBtn">Center Pulse</button>
+              </div>
+            </div>
+
+            <!-- Orientation-Aware Responsive Scope Wave -->
+            <div class="cyber-panel scope-panel" id="responsive-scope">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;">
+                  <span class="pill pill-legitimate">CREATESCOPE &bull; MEDIA QUERIES</span>
+                  <span class="mono" id="orientationBadge" style="font-size: 0.74rem; color: var(--emerald);">LANDSCAPE (Y-WAVE)</span>
+                </div>
+                <h3 style="font-family: var(--font-display); font-size: 1.4rem; margin: 1rem 0 0.4rem;">
+                  Adaptive Orientation Telemetry Wave
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+                  Automatically adapts oscillation axes using Anime.js v4 <code>createScope</code> when your
+                  viewport switches between landscape (<code>y: [-50, 50, -50]</code>) and portrait (<code>x: [-50, 50, -50]</code>).
+                </p>
+              </div>
+
+              <div class="scope-wave-stage" id="scopeWaveStage" aria-label="Orientation-aware animated signal wave">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; font-size: 0.78rem; color: var(--text-muted);">
+                <span class="mono">portrait: '(orientation: portrait)'</span>
+                <span class="mono" style="color: var(--cyan);">stagger(100ms)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 6: LIVE INSTANT PHISHING SANDBOX (CONNECTED TO REAL ML API)
+           ================================================================= -->
+      <section class="section" id="live-sandbox">
+        <div class="container">
+          <div class="cyber-panel sandbox-panel">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem;">
+              <div>
+                <span class="eyebrow">Real-Time ML Inference &bull; Live API Connected</span>
+                <h2 class="section-title" style="font-size: clamp(1.85rem, 3.2vw, 2.55rem); margin-bottom: 0.4rem;">
+                  Test the Detector <span class="text-gradient">Right Now.</span>
+                </h2>
+                <p class="section-subtitle" style="font-size: 0.95rem;">
+                  Load a simulated scenario or paste any email to run real Calibrated Linear SVM inference via <code>POST /api/analyze</code>.
+                </p>
+              </div>
+              <a href="/app" class="btn btn-secondary btn-sm">Open Full SOC Workspace &rarr;</a>
+            </div>
+
+            <div class="sandbox-grid">
+              <div>
+                <div class="preset-row" id="landingSampleButtons">
+                  <span class="mono" style="font-size: 0.75rem; color: var(--text-muted); align-self: center;">Load Sample:</span>
+                </div>
+
+                <label class="field-label" for="landingSubject">Email Subject</label>
+                <input id="landingSubject" class="cyber-input" type="text" placeholder="e.g. CRITICAL: Urgent Action Required - Verify Your Account" />
+
+                <label class="field-label" for="landingSender">Sender (Optional)</label>
+                <input id="landingSender" class="cyber-input" type="text" placeholder="e.g. alert-security@bank-verify-portal.top" />
+
+                <label class="field-label" for="landingBody">Email Body</label>
+                <textarea id="landingBody" class="cyber-textarea" placeholder="Paste email content or click a sample scenario above..."></textarea>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+                  <button type="button" class="btn btn-primary" id="landingAnalyzeBtn">
+                    <span>Run Live Threat Scan</span>
+                  </button>
+                  <button type="button" class="btn btn-ghost btn-sm" id="landingClearBtn">Clear</button>
+                </div>
+              </div>
+
+              <div class="sandbox-output" id="landingResultBox">
+                <div style="margin: auto; text-align: center; padding: 1.5rem 0.5rem;">
+                  <div style="font-size: 2rem; margin-bottom: 0.5rem; color: var(--cyan);">&#9673;</div>
+                  <h4 style="font-family: var(--font-display); margin: 0 0 0.4rem;">Awaiting Telemetry Input</h4>
+                  <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
+                    Click a curated sample on the left and press <strong>Run Live Threat Scan</strong> to view calibrated probabilities, XAI tokens, and URL heuristics.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 7: FULL WEB APP CTA & FOOTER
+           ================================================================= -->
+      <section class="section" style="padding-top: 2rem;">
+        <div class="container">
+          <div class="cta-banner">
+            <span class="eyebrow">Complete Full-Stack Web Application</span>
+            <h2 class="section-title" style="max-width: 720px; margin-left: auto; margin-right: auto;">
+              Explore the Complete <span class="text-gradient">Security Operations Center.</span>
+            </h2>
+            <p class="section-subtitle" style="max-width: 620px; margin: 0 auto 2rem;">
+              Switch across all 4 trained ML models, inspect interactive ROC &amp; Precision-Recall curves,
+              audit confusion matrices, explore RQ1–RQ4 research findings, and manage your privacy-first SQLite scan log.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.9rem; justify-content: center;">
+              <a href="/app" class="btn btn-primary btn-lg">Open Email Analyzer &rarr;</a>
+              <a href="/app#benchmarks" class="btn btn-secondary btn-lg">Inspect Model Benchmarks</a>
+              <a href="/app#history" class="btn btn-ghost btn-lg">View SQLite Audit Log</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div>
+            <strong style="color: var(--text-primary);">SentinelMail AI</strong> &mdash; Phishing Email Detection System (CSE Capstone 2026)
+          </div>
+          <div class="mono" style="font-size: 0.78rem;">
+            Scikit-learn &bull; TF-IDF &bull; Starlette &bull; GSAP ScrollTrigger &bull; Anime.js v4
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- GSAP 3.13+ (ScrollTrigger & ScrollSmoother are 100% free via jsDelivr) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js"></script>
+
+  <!-- Landing Page Animations + Live ML Sandbox Script (ESM for Anime.js v4) -->
+  <script type="module" src="/static/js/landing.js"></script>
+</body>
+</html>

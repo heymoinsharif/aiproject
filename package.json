@@ -1,0 +1,14 @@
+{
+  "name": "sentinelmail-phishing-detector-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-Powered Phishing Email Detection Full-Stack Web Application with GSAP ScrollTrigger, ScrollSmoother, Parallax, and Anime.js v4",
+  "type": "module",
+  "scripts": {
+    "start": "python web_app.py"
+  },
+  "dependencies": {
+    "animejs": "^4.0.2",
+    "gsap": "^3.13.0"
+  }
+}

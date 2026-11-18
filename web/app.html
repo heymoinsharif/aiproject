@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentinelMail SOC — AI Phishing Email Detector</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/static/css/shared.css" />
+  <link rel="stylesheet" href="/static/css/soc.css" />
+</head>
+<body>
+  <div class="soc-bg" aria-hidden="true"></div>
+
+  <!-- Fixed Top Navigation -->
+  <header class="site-nav scrolled">
+    <a href="/" class="nav-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 5.5V11.5C4 16.8 7.4 21.4 12 22.8C16.6 21.4 20 16.8 20 11.5V5.5L12 2Z" stroke="#00d2ff" stroke-width="1.8" fill="rgba(0,210,255,0.14)"/>
+          <path d="M8.8 12.2L11 14.4L15.6 9.8" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>SentinelMail</span>
+      <span class="brand-tag">SOC Workspace</span>
+    </a>
+
+    <nav class="nav-links" aria-label="SOC Modules">
+      <a href="#analyzer" data-view="analyzer" class="active">Email Analyzer</a>
+      <a href="#benchmarks" data-view="benchmarks">Benchmarks</a>
+      <a href="#dataset" data-view="dataset">Dataset</a>
+      <a href="#history" data-view="history">Audit History</a>
+      <a href="#about" data-view="about">Methodology</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="/" class="btn btn-ghost btn-sm">&larr; Landing Page</a>
+    </div>
+  </header>
+
+  <div class="soc-shell">
+    <!-- Sidebar -->
+    <aside class="soc-sidebar">
+      <div>
+        <div class="sidebar-status">
+          <div class="mono" style="font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.08em;">THREAT NODE STATUS</div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.35rem; font-weight: 600; color: var(--emerald); font-size: 0.92rem;">
+            <span class="status-dot"></span>
+            <span id="sidebarStatusText">Operational &amp; Local</span>
+          </div>
+          <div class="mono" style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.35rem;" id="sidebarModelText">
+            Primary: Linear SVM
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Workspace modules">
+          <button type="button" class="sidebar-tab active" data-view="analyzer">
+            <span class="sidebar-tab-icon">01</span>
+            <span>Analyze Email &amp; XAI</span>
+          </button>
+          <button type="button" class="sidebar-tab" data-view="benchmarks">
+            <span class="sidebar-tab-icon">02</span>
+            <span>Model Benchmarks</span>
+          </button>
+          <button type="button" class="sidebar-tab" data-view="dataset">
+            <span class="sidebar-tab-icon">03</span>
+            <span>Dataset &amp; Hygiene</span>
+          </button>
+          <button type="button" class="sidebar-tab" data-view="history">
+            <span class="sidebar-tab-icon">04</span>
+            <span>Audit History</span>
+          </button>
+          <button type="button" class="sidebar-tab" data-view="about">
+            <span class="sidebar-tab-icon">05</span>
+            <span>About &amp; Viva Defense</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div style="color: var(--text-muted); font-weight: 600; margin-bottom: 0.3rem;">100% Offline Privacy</div>
+        Email bodies and credentials never leave your machine and are never stored in SQLite.
+      </div>
+    </aside>
+
+    <!-- Mobile Tab Bar -->
+    <div class="mobile-tabs">
+      <button type="button" class="filter-pill active" data-view="analyzer">Analyzer</button>
+      <button type="button" class="filter-pill" data-view="benchmarks">Benchmarks</button>
+      <button type="button" class="filter-pill" data-view="dataset">Dataset</button>
+      <button type="button" class="filter-pill" data-view="history">History</button>
+      <button type="button" class="filter-pill" data-view="about">About</button>
+    </div>
+
+    <!-- Main Workspace -->
+    <main class="soc-main">
+
+      <!-- =================================================================
+           VIEW 1: LIVE EMAIL THREAT ANALYZER & XAI
+           ================================================================= -->
+      <section class="soc-view active" id="view-analyzer">
+        <div class="view-header">
+          <div>
+            <span class="eyebrow">Real-Time Threat Inspection &bull; Explainable AI</span>
+            <h1 class="view-title">Phishing Email Threat Analyzer</h1>
+            <p class="view-sub">Evaluate emails using calibrated multi-model ML, linear token attribution, and offline URL heuristics.</p>
+          </div>
+        </div>
+
+        <!-- Live KPIs -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-val" id="kpiTotal">0</div>
+            <div class="kpi-lbl">Total Emails Scanned</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="kpiPhishing" style="color: var(--crimson);">0</div>
+            <div class="kpi-lbl">Phishing Flagged</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="kpiSuspicious" style="color: var(--amber);">0</div>
+            <div class="kpi-lbl">Suspicious Review</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="kpiTopF1" style="color: var(--emerald);">99.64%</div>
+            <div class="kpi-lbl">Top Model Test F1</div>
+          </div>
+        </div>
+
+        <div class="analyzer-layout">
+          <!-- Input Column -->
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title">
+              <span>Email Telemetry Input</span>
+              <span class="pill pill-info">4 Curated Samples</span>
+            </div>
+
+            <div class="samples-grid" id="socSamplesGrid"></div>
+
+            <div class="form-row">
+              <div>
+                <label class="field-label" for="socModelSelect">Classifier Model</label>
+                <select id="socModelSelect" class="soc-select"></select>
+              </div>
+              <div>
+                <label class="field-label" for="socSender">Sender Address (Optional)</label>
+                <input id="socSender" class="soc-input" type="text" placeholder="security@domain.com" />
+              </div>
+            </div>
+
+            <label class="field-label" for="socSubject">Email Subject</label>
+            <input id="socSubject" class="soc-input" type="text" placeholder="Paste email subject line..." />
+
+            <label class="field-label" for="socBody">Email Body Content</label>
+            <textarea id="socBody" class="soc-textarea" placeholder="Paste full raw email message content here..."></textarea>
+
+            <label class="field-label" for="socUrls">Additional Extracted URLs (Optional, space-separated)</label>
+            <input id="socUrls" class="soc-input" type="text" placeholder="e.g. http://192.168.1.105/login https://bit.ly/demo" />
+
+            <label class="checkbox-row">
+              <input type="checkbox" id="socSaveHistory" checked />
+              <span>Log lightweight metadata (subject snippet &amp; verdict only) to local SQLite audit log</span>
+            </label>
+
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary" id="socAnalyzeBtn">Analyze Email &amp; Explain</button>
+              <button type="button" class="btn btn-ghost" id="socClearBtn">Reset Fields</button>
+            </div>
+          </div>
+
+          <!-- Output Column -->
+          <div class="cyber-panel panel-pad" id="socResultContainer">
+            <div style="text-align: center; padding: 3.5rem 1rem;">
+              <div style="font-size: 2.4rem; color: var(--cyan); margin-bottom: 0.75rem;">&#9673;</div>
+              <h3 style="font-family: var(--font-display); margin: 0 0 0.5rem;">Ready for Inspection</h3>
+              <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 400px; margin: 0 auto;">
+                Select one of the curated fictional sample scenarios or paste your own email text, then click
+                <strong>Analyze Email &amp; Explain</strong> to inspect calibrated probabilities, XAI token weights, and URL indicators.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           VIEW 2: MODEL BENCHMARKS & RESEARCH QUESTIONS (RQ1 - RQ4)
+           ================================================================= -->
+      <section class="soc-view" id="view-benchmarks">
+        <div class="view-header">
+          <div>
+            <span class="eyebrow">5-Fold Stratified CV &bull; Held-Out Test Partition (2,000 Emails)</span>
+            <h1 class="view-title">Model Benchmarks &amp; Research Findings</h1>
+            <p class="view-sub">Empirical evaluation across 4 ML algorithms, confusion matrices, ROC/PR curves, and RQ1–RQ4 conclusions.</p>
+          </div>
+        </div>
+
+        <div class="cyber-panel panel-pad" style="margin-bottom: 1.5rem;">
+          <div class="panel-title">
+            <span>Comparative Classifier Benchmark Table</span>
+            <span class="pill pill-legitimate" id="bestModelPill">Best: Support Vector Machine (SVM)</span>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table" id="benchmarkTable">
+              <thead>
+                <tr>
+                  <th>Algorithm</th>
+                  <th>CV F1 (Mean)</th>
+                  <th>Accuracy</th>
+                  <th>Precision</th>
+                  <th>Recall</th>
+                  <th>Test F1</th>
+                  <th>ROC-AUC</th>
+                  <th>Train (s)</th>
+                  <th>Latency (ms)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Confusion Matrix & Trade-off Panel -->
+        <div class="two-col-grid">
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title">
+              <span>Confusion Matrix Inspector</span>
+            </div>
+            <div class="filter-bar" id="cmModelTabs"></div>
+            <div class="cm-grid" id="cmMatrixGrid"></div>
+            <div id="cmRatesBox" style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);"></div>
+          </div>
+
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title">
+              <span>Cybersecurity Error Trade-Offs &amp; Accuracy Paradox</span>
+            </div>
+            <div id="tradeoffsContainer" style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65;"></div>
+          </div>
+        </div>
+
+        <!-- Interactive SVG ROC & Precision-Recall Curves -->
+        <div class="two-col-grid">
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title">
+              <span>ROC Curves (True Positive vs False Positive Rate)</span>
+              <span class="mono" style="font-size: 0.74rem; color: var(--cyan);">AUC &approx; 0.9995</span>
+            </div>
+            <div id="rocChartContainer"></div>
+          </div>
+
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title">
+              <span>Precision-Recall Curves</span>
+              <span class="mono" style="font-size: 0.74rem; color: var(--emerald);">High-Recall Zone</span>
+            </div>
+            <div id="prChartContainer"></div>
+          </div>
+        </div>
+
+        <!-- Research Questions RQ1 - RQ4 -->
+        <div class="rq-grid" id="rqCardsGrid"></div>
+      </section>
+
+      <!-- =================================================================
+           VIEW 3: DATASET PROVENANCE & HYGIENE
+           ================================================================= -->
+      <section class="soc-view" id="view-dataset">
+        <div class="view-header">
+          <div>
+            <span class="eyebrow">Data Hygiene &amp; Scientific Integrity</span>
+            <h1 class="view-title">Dataset Provenance &amp; Leakage Prevention</h1>
+            <p class="view-sub">CEAS 2008 peer-reviewed benchmark corpus, class distribution, and strict 80/20 stratified isolation.</p>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="datasetKpiGrid"></div>
+
+        <div class="two-col-grid">
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title"><span>Class Balance Distribution</span></div>
+            <div id="datasetDonutContainer" style="display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; padding: 1rem 0;"></div>
+          </div>
+
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title"><span>Corpus Provenance &amp; Zero-Leakage Protocol</span></div>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+              <li><strong>Benchmark Source:</strong> CEAS 2008 Spam Conference Challenge Corpus (39,154 raw emails &rarr; 10,000 deduplicated benchmark partition).</li>
+              <li><strong>Schema Columns:</strong> <code>sender</code>, <code>receiver</code>, <code>date</code>, <code>subject</code>, <code>body</code>, <code>urls</code>, and verified ground-truth <code>label</code>.</li>
+              <li><strong>Strict Train/Test Isolation:</strong> 80% Train (8,000) / 20% Test (2,000) stratified split executed <em>before</em> fitting TF-IDF vectorizers.</li>
+              <li><strong>HTML &amp; Duplicate Hygiene:</strong> Exact duplicate templates purged; HTML tags stripped and entities decoded consistently.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           VIEW 4: PRIVACY-PRESERVING AUDIT HISTORY (SQLITE)
+           ================================================================= -->
+      <section class="soc-view" id="view-history">
+        <div class="view-header">
+          <div>
+            <span class="eyebrow">Embedded SQLite &bull; Body-Free Audit Log</span>
+            <h1 class="view-title">Scan Audit History</h1>
+            <p class="view-sub">Inspect historical classifications and metadata. Full email message bodies and credentials are never persisted.</p>
+          </div>
+          <div style="display: flex; gap: 0.65rem;">
+            <button type="button" class="btn btn-secondary btn-sm" id="refreshHistoryBtn">Refresh Log</button>
+            <button type="button" class="btn btn-danger btn-sm" id="clearHistoryBtn">Purge All History</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="historyKpiGrid"></div>
+
+        <div class="cyber-panel panel-pad">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div class="filter-bar" id="historyFilterBar">
+              <button type="button" class="filter-pill active" data-filter="All">All Scans</button>
+              <button type="button" class="filter-pill" data-filter="Likely Phishing">Likely Phishing</button>
+              <button type="button" class="filter-pill" data-filter="Suspicious">Suspicious</button>
+              <button type="button" class="filter-pill" data-filter="Likely Legitimate">Likely Legitimate</button>
+            </div>
+            <span class="mono" style="font-size: 0.76rem; color: var(--text-muted);" id="historyCountNote">0 records</span>
+          </div>
+
+          <div class="data-table-wrap">
+            <table class="data-table" id="historyTable">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Subject Snippet</th>
+                  <th>Sender Domain</th>
+                  <th>Verdict</th>
+                  <th>Confidence</th>
+                  <th>URLs</th>
+                  <th>Indicators</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           VIEW 5: ACADEMIC METHODOLOGY & VIVA DEFENSE Q&A
+           ================================================================= -->
+      <section class="soc-view" id="view-about">
+        <div class="view-header">
+          <div>
+            <span class="eyebrow">CSE Capstone Project &bull; Academic Defense Edition</span>
+            <h1 class="view-title">System Methodology &amp; Viva Defense Guide</h1>
+            <p class="view-sub">Architectural breakdown, machine learning algorithms, and key technical Q&amp;A.</p>
+          </div>
+        </div>
+
+        <div class="cyber-panel panel-pad" style="margin-bottom: 1.5rem;">
+          <div class="panel-title"><span>End-to-End Threat Detection Pipeline</span></div>
+          <pre class="mono" style="margin: 0; padding: 1.15rem; border-radius: var(--radius-md); background: rgba(4,7,18,0.85); border: 1px solid var(--border-subtle); color: var(--cyan-soft); overflow-x: auto; font-size: 0.82rem; line-height: 1.7;">[User Email Input] ──► [HTML Sanitization &amp; NLP Normalization] ──► [TF-IDF 5,000 N-Grams (1,2)]
+                         │                                                     │
+                         ├──► [Offline URL Structural Scanner (0 Network)]     ▼
+                         │                                         [Calibrated ML Classifier]
+                         │                                         (SVM / LR / RF / MNB)
+                         │                                                     │
+                         ▼                                                     ▼
+               [Observed Heuristics] ◄─── [Linear Coefficient XAI] ◄─── [3-Tier Risk Verdict]
+                                                                               │
+                                                                               ▼
+                                                                  [Privacy-First SQLite Log]</pre>
+        </div>
+
+        <div class="two-col-grid" style="margin-top: 0;">
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title"><span>Frequently Asked Viva Defense Q&amp;A</span></div>
+            <details class="viva-item" open>
+              <summary>Why did you calibrate the Support Vector Machine?</summary>
+              <p>Standard Linear SVM outputs uncalibrated signed hyperplane distances (<code>decision_function</code>). Wrapping it with <code>CalibratedClassifierCV</code> using Platt sigmoid scaling produces calibrated probabilities that accurately reflect threat confidence across our 3-tier thresholds.</p>
+            </details>
+            <details class="viva-item">
+              <summary>How did you prevent data leakage during training?</summary>
+              <p>We performed an 80/20 stratified split before any vectorization occurred. The TF-IDF vectorizer (5,000 unigrams &amp; bigrams) was fitted strictly on the 8,000 training emails; the 2,000 test emails were only transformed against the fixed vocabulary.</p>
+            </details>
+            <details class="viva-item">
+              <summary>Why does the URL scanner run 100% offline?</summary>
+              <p>Making live DNS or HTTP requests to attacker-controlled URLs can trigger unique tracking beacons (confirming an active target inbox) or expose the scanner host to drive-by payloads. Static structural heuristics inspect IP hosts, shorteners, punycode, and subdomains safely offline.</p>
+            </details>
+            <details class="viva-item">
+              <summary>What is the Accuracy Paradox in cybersecurity?</summary>
+              <p>If 99% of emails are legitimate and 1% are phishing, a dummy model predicting "Legitimate" for everything reaches 99% accuracy while letting 100% of attacks through. Recall, Precision, F1-Score, and PR Curves measure real defensive effectiveness.</p>
+            </details>
+          </div>
+
+          <div class="cyber-panel panel-pad">
+            <div class="panel-title"><span>Core Algorithms &amp; Future Roadmap</span></div>
+            <ul style="margin: 0 0 1.4rem; padding-left: 1.2rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.75;">
+              <li><strong>Support Vector Machine (Calibrated Linear SVM):</strong> Optimal hyperplane margin maximization in sparse TF-IDF space (99.64% F1, 0.001 ms latency).</li>
+              <li><strong>Logistic Regression (L2, Balanced):</strong> Convex cross-entropy linear classifier with direct log-odds interpretability (99.28% F1).</li>
+              <li><strong>Random Forest (100 Trees):</strong> Non-linear ensemble resistant to overfitting with strong recall (98.75% F1).</li>
+              <li><strong>Multinomial Naive Bayes:</strong> Ultra-fast generative probabilistic baseline (96.04% F1, 0.007 s training).</li>
+            </ul>
+            <div class="panel-title" style="margin-top: 1rem;"><span>Next-Gen Roadmap</span></div>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-muted); font-size: 0.88rem; line-height: 1.7;">
+              <li>Fine-tuned DistilBERT / RoBERTa contextual transformer embeddings</li>
+              <li>Cryptographic email header inspection (SPF, DKIM, DMARC)</li>
+              <li>Optional opt-in VirusTotal / URLhaus threat intelligence enrichment</li>
+              <li>Static attachment entropy &amp; macro analysis sandbox</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/static/js/soc.js"></script>
+</body>
+</html>

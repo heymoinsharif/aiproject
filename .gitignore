@@ -1,0 +1,29 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments
+env/
+venv/
+.venv/
+
+# Streamlit
+.streamlit/
+*.log
+
+# Databases & local caches
+*.db
+*.sqlite
+*.sqlite3
+
+# Large raw datasets (CEAS_08.csv is 68MB and can be downloaded via script if desired)
+# phishing_emails.csv is tracked for seamless out-of-the-box project execution
+data/CEAS_08.csv
+
+# Node dependencies (if installed locally)
+node_modules/
