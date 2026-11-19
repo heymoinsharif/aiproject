@@ -11,7 +11,12 @@ from datetime import datetime
 from typing import List, Dict, Any, Optional
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_DB_PATH = os.path.join(BASE_DIR, "data", "analysis_history.db")
+
+# In serverless environments like Vercel/AWS Lambda, only /tmp is writable
+if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    DEFAULT_DB_PATH = os.path.join("/tmp", "analysis_history.db")
+else:
+    DEFAULT_DB_PATH = os.path.join(BASE_DIR, "data", "analysis_history.db")
 
 
 def get_db_connection(db_path: Optional[str] = None) -> sqlite3.Connection:
