@@ -6,8 +6,7 @@ and train/test splitting with data leakage prevention.
 
 import re
 import html
-from typing import Tuple, List, Optional
-import pandas as pd
+from typing import Tuple, List, Optional, Any
 from sklearn.model_selection import train_test_split
 
 
@@ -39,6 +38,19 @@ def clean_text_for_nlp(text: str, mask_urls: bool = False) -> str:
     return text.strip().lower()
 
 
+def _is_na(val: Any) -> bool:
+    """Helper to check for None or NaN without requiring pandas."""
+    if val is None:
+        return True
+    try:
+        import math
+        if isinstance(val, float) and math.isnan(val):
+            return True
+    except Exception:
+        pass
+    return False
+
+
 def combine_email_fields(
     subject: Optional[str] = "",
     body: Optional[str] = "",
@@ -48,8 +60,8 @@ def combine_email_fields(
     Combines subject, body, and optionally sender domain into a single textual representation.
     Subject is weighted by appearing at the beginning.
     """
-    subj_str = str(subject) if subject is not None and not pd.isna(subject) else ""
-    body_str = str(body) if body is not None and not pd.isna(body) else ""
+    subj_str = str(subject) if subject is not None and not _is_na(subject) else ""
+    body_str = str(body) if body is not None and not _is_na(body) else ""
     
     parts = []
     if subj_str.strip():
@@ -62,17 +74,18 @@ def combine_email_fields(
 
 
 def get_stratified_train_test_split(
-    df: pd.DataFrame,
+    df: Any,
     text_column: str = "email_text",
     target_column: str = "label",
     test_size: float = 0.20,
     random_state: int = 42
-) -> Tuple[pd.Series, pd.Series, pd.Series, pd.Series]:
+) -> Tuple[Any, Any, Any, Any]:
     """
     Splits the dataset into train and test sets using stratified sampling.
     Returns:
         X_train_text, X_test_text, y_train, y_test
     """
+    import pandas as pd
     if text_column not in df.columns or target_column not in df.columns:
         raise KeyError(f"Columns '{text_column}' or '{target_column}' missing from DataFrame.")
 
