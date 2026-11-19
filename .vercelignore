@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+tests
+data/CEAS_08.csv
+data/phishing_emails.csv
+reports
+pages
+app.py
+run_streamlit.bat
+run_tests.bat
+requirements-dev.txt
