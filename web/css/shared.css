@@ -55,7 +55,7 @@ html {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -93,7 +93,7 @@ select {
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(1.25rem, 4vw, 3.5rem);
-  background: rgba(4, 7, 18, 0.72);
+  background: rgba(4, 7, 18, 0.82);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border-subtle);
@@ -101,7 +101,7 @@ select {
 }
 
 .site-nav.scrolled {
-  background: rgba(4, 7, 18, 0.92);
+  background: rgba(4, 7, 18, 0.94);
   border-bottom-color: var(--border-cyan);
 }
 
@@ -142,11 +142,11 @@ select {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 1.5rem;
 }
 
 .nav-links a {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--text-muted);
   transition: color var(--transition-fast);
@@ -371,7 +371,7 @@ select {
   background: rgba(0, 210, 255, 0.5);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .nav-links {
     display: none;
   }

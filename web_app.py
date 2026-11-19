@@ -213,7 +213,7 @@ async def lifespan(app: Starlette):
 
 routes = [
     Route("/", landing_page, methods=["GET"]),
-    Route("/app", soc_app_page, methods=["GET"]),
+    Route("/app", landing_page, methods=["GET"]),
     Route("/api/health", api_health, methods=["GET"]),
     Route("/api/stats", api_stats, methods=["GET"]),
     Route("/api/samples", api_samples, methods=["GET"]),

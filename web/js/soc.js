@@ -37,7 +37,7 @@ function escapeHtml(str) {
 // VIEW ROUTING
 // ============================================================================
 
-function switchView(viewName, updateHash = true) {
+function switchView(viewName, updateHash = false) {
   const valid = ['analyzer', 'benchmarks', 'dataset', 'history', 'about'];
   const target = valid.includes(viewName) ? viewName : 'analyzer';
   state.activeView = target;
@@ -49,10 +49,6 @@ function switchView(viewName, updateHash = true) {
   document.querySelectorAll('[data-view]').forEach((el) => {
     el.classList.toggle('active', el.getAttribute('data-view') === target);
   });
-
-  if (updateHash && window.location.hash !== `#${target}`) {
-    history.replaceState(null, '', `#${target}`);
-  }
 
   if (target === 'benchmarks' || target === 'dataset') {
     ensureBenchmarksLoaded();
@@ -70,13 +66,18 @@ function wireNavigation() {
     });
   });
 
-  window.addEventListener('hashchange', () => {
-    const hash = window.location.hash.replace('#', '');
-    if (hash) switchView(hash, false);
+  document.querySelectorAll('[data-soc-tab]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tab = el.getAttribute('data-soc-tab');
+      switchView(tab);
+      const ws = document.getElementById('soc-workspace');
+      if (ws) ws.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   });
 
   const initialHash = window.location.hash.replace('#', '');
-  if (initialHash) {
+  if (['analyzer', 'benchmarks', 'dataset', 'history', 'about'].includes(initialHash)) {
     switchView(initialHash, false);
   }
 }

@@ -33,11 +33,13 @@ def test_landing_page_serves_gsap_and_animejs_sections():
 
 
 def test_soc_app_page_serves_complete_workspace():
-    app_path = os.path.join(WEB_DIR, "app.html")
-    assert os.path.exists(app_path)
-    with open(app_path, "r", encoding="utf-8") as f:
+    # In unified single-URL architecture, the complete SOC workspace is embedded directly in index.html
+    index_path = os.path.join(WEB_DIR, "index.html")
+    assert os.path.exists(index_path)
+    with open(index_path, "r", encoding="utf-8") as f:
         html = f.read()
 
+    assert 'id="soc-workspace"' in html
     assert 'id="view-analyzer"' in html
     assert 'id="view-benchmarks"' in html
     assert 'id="view-dataset"' in html
